@@ -8,12 +8,6 @@ import importlib.util
 with open("config.yaml", "r") as file:
     config_data = yaml.safe_load(file)
 
-#load the gpt bot from a different directory
-bot_app_path = "../chatbot/app.py"
-spec = importlib.util.spec_from_file_location("app.py", bot_app_path)
-bot_app = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(bot_app)
-
 # Set OpenAI API key
 openai.api_key = config_data.get("openai_api_key")
 bot_token = config_data.get("discord_bot_token")
@@ -32,6 +26,16 @@ class DisplayNameMemberConverter(commands.MemberConverter):
                 return member
         raise commands.MemberNotFound(argument)
 
+async def generate_cardReading(username, question, cards):
+    prompt = f"based on the question from {username}, create an appropriate and gentle tarrot card reading"\
+             f"according to {cards} and focus on topics:\n{question}\n"
+    response = openai.responses.create(
+         model="gpt-4o-2024-08-06",
+            input=prompt,
+            temperature=0.5,
+    )
+    read = response.output_text.strip()
+    return read
 
 bot = commands.Bot(command_prefix="/!", intents=intents)
 
@@ -44,7 +48,21 @@ async def on_ready():
 async def test(ctx):
     await ctx.send("test command!")
 
-async def bot_talk(username, messages):
+@bot.command(name='tarrot')
+async def tarrot(ctx, *, username: str, message):
+    try:
+        user = await DisplayNameMemberConverter().convert(ctx, username)
+    except commands.MemberNotFound:
+        await ctx.send(f"user {username} not found.")
+        return
+    question = []
+    question.append(message)
+    card = 1
+    read = await generate_cardReading(username,question,card)
+    await ctx.send(read)
+
+
+# connect the bot to talk
 
 
 bot.run(bot_token)
