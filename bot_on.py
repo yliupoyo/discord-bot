@@ -26,16 +26,16 @@ class DisplayNameMemberConverter(commands.MemberConverter):
                 return member
         raise commands.MemberNotFound(argument)
 
-async def generate_cardReading(username, question, cards):
-    prompt = f"based on the question from {username}, create an appropriate and gentle tarrot card reading"\
-             f"according to {cards} and focus on topics:\n{question}\n"
-    response = openai.responses.create(
-         model="gpt-4o-2024-08-06",
-            input=prompt,
-            temperature=0.5,
-    )
-    read = response.output_text.strip()
-    return read
+#async def generate_cardReading(username, question, cards):
+    #prompt = f"based on the question from {username}, create an appropriate and gentle tarrot card reading"\
+    #         f"according to {cards} and focus on topics:\n{question}\n"
+    #response = openai.responses.create(
+    #     model="gpt-4o-2024-08-06",
+    #        input=prompt,
+    #        temperature=0.5,
+    #)
+    #read = response.output_text.strip()
+    #return read
 
 bot = commands.Bot(command_prefix="/!", intents=intents)
 
@@ -55,11 +55,11 @@ async def tarrot(ctx, *, username: str, message):
     except commands.MemberNotFound:
         await ctx.send(f"user {username} not found.")
         return
-    question = []
-    question.append(message)
-    card = 1
-    read = await generate_cardReading(username,question,card)
-    await ctx.send(read)
+    #question = []
+    #question.append(message)
+    #card = 1
+    #read = await generate_cardReading(username,question,card)
+    await ctx.send(https://randomtarotcard.com/TheHermit.jpg)
 
 
 # connect the bot to talk
