@@ -59,7 +59,8 @@ async def tarrot(ctx, *, username: str, message):
     #question.append(message)
     #card = 1
     #read = await generate_cardReading(username,question,card)
-    await ctx.send(https://randomtarotcard.com/TheHermit.jpg)
+    cardurl = "https://randomtarotcard.com/TheHermit.jpg"
+    await ctx.send(cardurl)
 
 
 # connect the bot to talk
